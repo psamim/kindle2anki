@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-# https://github.com/rampage644/kindle-to-anki
 
 import card_creator
 import sys
