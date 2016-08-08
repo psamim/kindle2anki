@@ -181,6 +181,13 @@ if __name__ == '__main__':
         help='Show debug messages',
         default=False,
         action="store_true")
+    parser.add_argument(
+        '--no-ask',
+        help='Do not ask for card back in the command line',
+        default=False,
+        action="store_true")
+
+
 
     args = parser.parse_args()
 
@@ -235,26 +242,28 @@ if __name__ == '__main__':
             print('ok!')
 
         else:
-            print(Style.BRIGHT + "Enter card back:" + Style.RESET_ALL +
-                  Style.DIM + '[q/s]' + Style.RESET_ALL)
-            desc = input()
-            if desc == 'q':
-                if prev_timestamp != 0:
-                    update_last_timestamp(prev_timestamp)
+            desc = ''
+            if not args.no_ask:
+                print(Style.BRIGHT + "Enter card back:" + Style.RESET_ALL +
+                      Style.DIM + '[q/s]' + Style.RESET_ALL)
+                desc = input()
+                if desc == 'q':
+                    if prev_timestamp != 0:
+                        update_last_timestamp(prev_timestamp)
 
-                if args.out:
-                    print(
-                        '[100%]\tWrite to file {}...'.format(args.out),
-                        end='',
-                        flush=True)
-                    write_to_csv(args.out, data)
+                    if args.out:
+                        print(
+                            '[100%]\tWrite to file {}...'.format(args.out),
+                            end='',
+                            flush=True)
+                        write_to_csv(args.out, data)
 
-                sys.exit(0)
+                    sys.exit(0)
 
-            if desc == 's':
-                print(Style.DIM + "===============================================================================" + Style.RESET_ALL)
-                prev_timestamp = timestamp
-                continue
+                if desc == 's':
+                    print(Style.DIM + "===============================================================================" + Style.RESET_ALL)
+                    prev_timestamp = timestamp
+                    continue
 
         if not context:
             context = ''
