@@ -1,32 +1,33 @@
 #+TITLE: kindle2anki
 
 * Description
-  This is a Python script to help add words from kindle to Anki. 
+  This is a Python script to help add words from Kindle to Anki. 
 
 * Features
 - It can directly add words to Anki decks or creates a anki-ready tsv file.
 - Asks for card back in the terminal (optional).
 - Adds words from both the *Vocabulary Builder* and your *Notes* (=My Clippings.txt=).
-- Last timestamp is written to =~/.kindle=. During next import only new lookups are exported. One can manipulate value written to ~/.kindle to get only needed words from Kindle.
+- Last timestamp is written to =~/.kindle=. During next import only new lookups are exported. One can manipulate value written to =~/.kindle= to get only needed words from Kindle.
 - Retrieve translations, images and sounds from LinguaLeo (from https://github.com/rampage644/kindle-to-anki)
 
 * Usage
 - Import new words from vocabulary builder since last time, and asks for card back in the terminal. Words can be skipped (s) or you can quit at any words (q).
   
   #+BEGIN_SRC shell
-  $ ./kindle2anki.py --kindle '/run/media/samim/Kindle/system/Vocabulary/vocab.db' --collection '~/Documents/Anki/User 1/collection.anki2' --deck words
+  $ ./kindle2anki.py --kindle '/run/media/samim/Kindle/system/Vocabulary/vocab.db' \
+     --collection '~/Documents/Anki/User 1/collection.anki2' --deck words
 
   [0%]
   Word: include
-  Context: Dictionary Your Kindle includes one or more dictionaries for each supported language.
+  Context: Your Kindle includes one or more dictionaries for each supported language.
   Enter card back:[q/s]
-
   #+END_SRC
 
-- Import new words from notes since last time, do not ask for card back (edit later in anki).
+- Import new words from notes since last time, do not ask for card back (to edit later in Anki).
   
   #+BEGIN_SRC shell
-  $ ./kindle2anki.py --src '/run/media/samim/Kindle/documents/My Clippings.txt --collection '~/Documents/Anki/User 1/collection.anki2' --deck words --no-ask
+  $ ./kindle2anki.py --src '/run/media/samim/Kindle/documents/My Clippings.txt' \
+     --collection '~/Documents/Anki/User 1/collection.anki2' --deck words --no-ask
 #+END_SRC
 
 - I have not tested translation (from https://github.com/rampage644/kindle-to-anki)
@@ -49,12 +50,12 @@ usage: import_from_kindle.py [-h] [--kindle KINDLE] [--src SRC]
 
 optional arguments:
   -h, --help            show this help message and exit
-  --kindle KINDLE       Path to kindle db file (usually vocab.db)
+  --kindle KINDLE       Path to Kindle db file (usually vocab.db)
   --src SRC             Path to "documents/My Clippings.txt" on kindle
   --collection COLLECTION
-                        Path to anki collection file (.anki file)
+                        Path to Anki collection file (.anki file)
   --deck DECK           Anki deck name
-  -o OUT, --out OUT     CSV output filename to import into anki, if not
+  -o OUT, --out OUT     CSV output filename to import into Anki, if not
                         provided words are added to provided Anki deck and
                         collection
   -m MEDIA_PATH, --media-path MEDIA_PATH
@@ -70,7 +71,12 @@ optional arguments:
   --no-ask              Do not ask for card back in the command line
 #+END_SRC
 
+* Automatic Sync
+One can use udev rules to run this script automatically on Kindle connect. See 
+https://github.com/seletskiy/runki#kindle--udev
+
 * Credits
 - https://github.com/rampage644/kindle-to-anki
 - https://github.com/sebpearce/firewood
+- https://github.com/seletskiy/runki
  
