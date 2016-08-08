@@ -14,7 +14,7 @@
 - Import new words from vocabulary builder since last time, and asks for card back in the terminal. Words can be skipped (s) or you can quit at any words (q).
   
   #+BEGIN_SRC shell
-  $ ./import_from_kindle.py --kindle '/run/media/samim/Kindle/system/Vocabulary/vocab.db' --collection '~/Documents/Anki/User 1/collection.anki2' --deck words
+  $ ./kindle2anki.py --kindle '/run/media/samim/Kindle/system/Vocabulary/vocab.db' --collection '~/Documents/Anki/User 1/collection.anki2' --deck words
 
   [0%]
   Word: include
@@ -26,7 +26,7 @@
 - Import new words from notes since last time, do not ask for card back (edit later in anki).
   
   #+BEGIN_SRC shell
-  $ ./import_from_kindle.py --src '/run/media/samim/Kindle/documents/My Clippings.txt --collection '~/Documents/Anki/User 1/collection.anki2' --deck words --no-ask
+  $ ./kindle2anki.py --src '/run/media/samim/Kindle/documents/My Clippings.txt --collection '~/Documents/Anki/User 1/collection.anki2' --deck words --no-ask
 #+END_SRC
 
 - I have not tested translation (from https://github.com/rampage644/kindle-to-anki)
@@ -39,7 +39,7 @@ Written in Python 3.
 
 * Help
 #+BEGIN_SRC shell
-$ ./import_from_kindle.py --help
+$ ./kindle2anki.py --help
 
 usage: import_from_kindle.py [-h] [--kindle KINDLE] [--src SRC]
                              [--collection COLLECTION] [--deck DECK] [-o OUT]
