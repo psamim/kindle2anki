@@ -9,6 +9,7 @@ import os
 import re
 import sqlite3
 import datetime
+import retrying
 import service
 import urllib
 import urllib.parse
@@ -122,6 +123,7 @@ def extract_filename_from_url(url):
     return os.path.split(path)[-1]
 
 
+@retrying.retry(stop_max_attempt_number=3)
 def download_file(url, path=''):
     res = urllib.request.urlretrieve(url, os.path.join(
         path, extract_filename_from_url(url)))
