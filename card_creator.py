@@ -1,7 +1,7 @@
 import sys
 import logging
 
-sys.path.append('/home/samim/src/anki-kindle/external/anki/')
+sys.path.append('./external/anki/')
 
 from anki import Collection as aopen
 
