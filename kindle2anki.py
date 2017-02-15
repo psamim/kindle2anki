@@ -15,11 +15,11 @@ import urllib
 import urllib.parse
 import urllib.request
 import logging
+import pyperclip
 from colorama import init, Fore, Back, Style
 init()
 
 TIMESTAMP_PATH = os.path.expanduser('~/.kindle')
-
 
 def get_lookups(db, timestamp=0):
     conn = sqlite3.connect(db)
@@ -146,7 +146,6 @@ def highlight_word_in_context(word, context):
     return re.sub(r'{}'.format(word),
                   '<span class=highlight>{}</span>'.format(word), context)
 
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -185,6 +184,11 @@ if __name__ == '__main__':
         help='Do not ask for card back in the command line',
         default=False,
         action="store_true")
+    parser.add_argument(
+        '--clipboard',
+        help='Copy each word to clipboard',
+        default=False,
+        action="store_true")
 
 
 
@@ -219,8 +223,13 @@ if __name__ == '__main__':
     prev_timestamp = 0
     for i, (word, context, timestamp) in enumerate(lookups):
         progress = int(100.0 * i / len(lookups))
-        to_print = Style.DIM + '[{}%]' + Style.RESET_ALL + '\t \n' + Style.BRIGHT + 'Word: ' + Style.RESET_ALL + '{} \n' + Style.BRIGHT + 'Context:' + Style.RESET_ALL + ' {} \n'
+        to_print = ('' + Style.DIM + '[{}%]' + Style.RESET_ALL + '\t \n'
+                    '' + Fore.GREEN + 'Word: ' + Style.RESET_ALL + '{} \n'
+                    '' + Fore.GREEN + 'Context:' + Style.RESET_ALL + ' {} \n')
         print(to_print.format(progress, word, context), end='', flush=True)
+
+        if args.clipboard:
+            pyperclip.copy(word)
 
         if lingualeo:
             tr, transcription, sound_url, img_url = translate(lingualeo, word)
