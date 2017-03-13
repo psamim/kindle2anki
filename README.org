@@ -15,7 +15,7 @@
   
   #+BEGIN_SRC shell
   $ ./kindle2anki.py --kindle '/run/media/samim/Kindle/system/Vocabulary/vocab.db' \
-     --collection '~/Documents/Anki/User 1/collection.anki2' --deck words
+     --collection '~/Documents/Anki/User 1/collection.anki2' --deck words --clipboard
 
   [0%]
   Word: include
@@ -33,8 +33,9 @@
 - I have not tested translation (from https://github.com/rampage644/kindle-to-anki)
 
 * Install
-Written in Python 3.
+From [[https://aur.archlinux.org/packages/kindle2anki-git/][AUR]] or:
 
+- Install Python 3
 - Clone this repo and init the submodules.
 - Install requirements (=pip install -r requirements.txt=)
 
@@ -42,20 +43,20 @@ Written in Python 3.
 #+BEGIN_SRC shell
 $ ./kindle2anki.py --help
 
-usage: import_from_kindle.py [-h] [--kindle KINDLE] [--src SRC]
-                             [--collection COLLECTION] [--deck DECK] [-o OUT]
-                             [-m MEDIA_PATH] [--email EMAIL]
-                             [--update-timestamp] [--pwd PWD]
-                             [--max-length MAX_LENGTH] [--verbose] [--no-ask]
+usage: kindle2anki.py [-h] [--kindle KINDLE] [--src SRC]
+                      [--collection COLLECTION] [--deck DECK] [-o OUT]
+                      [-m MEDIA_PATH] [--email EMAIL] [--update-timestamp]
+                      [--pwd PWD] [--max-length MAX_LENGTH] [--verbose]
+                      [--no-ask] [--clipboard]
 
 optional arguments:
   -h, --help            show this help message and exit
-  --kindle KINDLE       Path to Kindle db file (usually vocab.db)
+  --kindle KINDLE       Path to kindle db file (usually vocab.db)
   --src SRC             Path to "documents/My Clippings.txt" on kindle
   --collection COLLECTION
-                        Path to Anki collection file (.anki file)
+                        Path to anki collection file (.anki file)
   --deck DECK           Anki deck name
-  -o OUT, --out OUT     CSV output filename to import into Anki, if not
+  -o OUT, --out OUT     CSV output filename to import into anki, if not
                         provided words are added to provided Anki deck and
                         collection
   -m MEDIA_PATH, --media-path MEDIA_PATH
@@ -69,6 +70,7 @@ optional arguments:
                         importing big sentences
   --verbose             Show debug messages
   --no-ask              Do not ask for card back in the command line
+  --clipboard           Copy each word to clipboard
 #+END_SRC
 
 * Automatic Sync
