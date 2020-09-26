@@ -1,3 +1,0 @@
-[submodule "external/anki"]
-	path = external/anki
-	url = git@github.com:dae/anki.git
