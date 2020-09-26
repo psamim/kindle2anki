@@ -11,7 +11,7 @@
 - Retrieve translations, images and sounds from LinguaLeo (from https://github.com/rampage644/kindle-to-anki)
 
 * Usage
-- You can my post [[https://medium.com/@psamim/how-i-transfer-my-vocabs-from-my-kindle-paperwhite-to-anki-9330b0b116a][How I transfer my vocabs from my Kindle Paperwhite to Anki]]  
+- You can my post [[https://dev.to/psamim/how-i-transfer-my-vocabs-from-my-kindle-paperwhite-to-anki-1f4d][How I transfer my vocabs from my Kindle Paperwhite to Anki]]  
 - Import new words from vocabulary builder since last time, and asks for card back in the terminal. Words can be skipped (s) or you can quit at any words (q).
   
   #+BEGIN_SRC shell
