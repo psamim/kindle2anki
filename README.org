@@ -40,6 +40,9 @@ From [[https://aur.archlinux.org/packages/kindle2anki-git/][AUR]] or:
 - Clone this repo and init the submodules.
 - Install requirements (=pip install -r requirements.txt=)
 
+If you are manually installing pip requirements make sure the version of the Anki
+desktop and installed python module are the same.
+
 * Help
 #+BEGIN_SRC shell
 $ ./kindle2anki.py --help
