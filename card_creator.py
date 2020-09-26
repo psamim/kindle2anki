@@ -1,8 +1,5 @@
 import sys
 import logging
-
-sys.path.append('./external/anki/')
-
 from anki import Collection as aopen
 
 
