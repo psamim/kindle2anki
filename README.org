@@ -4,19 +4,22 @@
   This is a Python script to help add words from Kindle to Anki. 
 
 * Features
-- It can directly add words to Anki decks or creates a anki-ready tsv file.
+- It can directly add words to Anki decks (using [[https://github.com/FooSoft/anki-connect][anki-connect]] ) or creates a anki-ready tsv file.
 - Asks for card back in the terminal (optional).
 - Adds words from both the *Vocabulary Builder* and your *Notes* (=My Clippings.txt=).
+  Vocabulary builder holds all the words you look up in the dictionary on Kindle.
+  Clippings are your highlights.
 - Last timestamp is written to =~/.kindle=. During next import only new lookups are exported. One can manipulate value written to =~/.kindle= to get only needed words from Kindle.
 - Retrieve translations, images and sounds from LinguaLeo (from https://github.com/rampage644/kindle-to-anki)
 
 * Usage
-- You can my post [[https://dev.to/psamim/how-i-transfer-my-vocabs-from-my-kindle-paperwhite-to-anki-1f4d][How I transfer my vocabs from my Kindle Paperwhite to Anki]]  
+This uses  [[https://github.com/FooSoft/anki-connect][anki-connect]] , so make sure Anki is up and running.
+
 - Import new words from vocabulary builder since last time, and asks for card back in the terminal. Words can be skipped (s) or you can quit at any words (q).
+  =--clipboad= copies each word into clipboard so  you can use it to look-up into any dictionary.
   
   #+BEGIN_SRC shell
-  $ ./kindle2anki.py --kindle '/run/media/samim/Kindle/system/Vocabulary/vocab.db' \
-     --collection '~/Documents/Anki/User 1/collection.anki2' --deck words --clipboard
+  $ ./kindle2anki.py --vocab-db '/run/media/Kindle/system/Vocabulary/vocab.db' --deck words --clipboard
 
   [0%]
   Word: include
@@ -24,45 +27,45 @@
   Enter card back:[q/s]
   #+END_SRC
 
-- Import new words from notes since last time, do not ask for card back (to edit later in Anki).
+- Import new words from clippings since last time Do not ask for card back (to edit later in Anki) when =--ano-ask= is provided
   
   #+BEGIN_SRC shell
-  $ ./kindle2anki.py --src '/run/media/samim/Kindle/documents/My Clippings.txt' \
-     --collection '~/Documents/Anki/User 1/collection.anki2' --deck words --no-ask
+  $ ./kindle2anki.py --clippings '/run/media/Kindle/documents/My Clippings.txt' --deck words --no-ask
 #+END_SRC
 
-- I have not tested translation (from https://github.com/rampage644/kindle-to-anki)
+- I have not tested translation (code is from https://github.com/rampage644/kindle-to-anki)
+
+- You can see my out-dated post [[https://dev.to/psamim/how-i-transfer-my-vocabs-from-my-kindle-paperwhite-to-anki-1f4d][How I transfer my vocabs from my Kindle Paperwhite to Anki]] . Arguments have changed since then.
 
 * Install
-From [[https://aur.archlinux.org/packages/kindle2anki-git/][AUR]] or:
+The scripts uses  [[https://github.com/FooSoft/anki-connect][anki-connect]] . Make sure you have installed it.
+
+Then install this script from [[https://aur.archlinux.org/packages/kindle2anki-git/][AUR]] or:
 
 - Install Python 3
-- Clone this repo and init the submodules.
+- Clone this repo
 - Install requirements (=pip install -r requirements.txt=)
-
-If you are manually installing pip requirements make sure the version of the Anki
-desktop and installed python module are the same.
 
 * Help
 #+BEGIN_SRC shell
 $ ./kindle2anki.py --help
 
-usage: kindle2anki.py [-h] [--kindle KINDLE] [--src SRC]
-                      [--collection COLLECTION] [--deck DECK] [-o OUT]
-                      [-m MEDIA_PATH] [--email EMAIL] [--update-timestamp]
-                      [--pwd PWD] [--max-length MAX_LENGTH] [--verbose]
-                      [--no-ask] [--clipboard]
+usage: kindle2anki.py [-h] [--vocab-db VOCAB_DB] [--clippings CLIPPINGS]
+                      [--deck DECK] [-o OUT] [-m MEDIA_PATH] [--email EMAIL]
+                      [--update-timestamp] [--pwd PWD]
+                      [--max-length MAX_LENGTH] [--verbose] [--no-ask]
+                      [--clipboard]
 
 optional arguments:
   -h, --help            show this help message and exit
-  --kindle KINDLE       Path to kindle db file (usually vocab.db)
-  --src SRC             Path to "documents/My Clippings.txt" on kindle
-  --collection COLLECTION
-                        Path to anki collection file (.anki file)
+  --vocab-db VOCAB_DB   Path to Kindle vocab DB file (usually vocab.db on
+                        Kindle). Provide this either this or --clippings
+  --clippings CLIPPINGS
+                        Path to clippings (usually "documents/My
+                        Clippings.txt" on Kindle)
   --deck DECK           Anki deck name
-  -o OUT, --out OUT     CSV output filename to import into anki, if not
-                        provided words are added to provided Anki deck and
-                        collection
+  -o OUT, --out OUT     CSV output filename to import into Anki, if not
+                        provided words are added to Anki using anki-connect
   -m MEDIA_PATH, --media-path MEDIA_PATH
                         Where to store media files (sounds/images) from
                         Lingualeo

@@ -1,48 +1,40 @@
-import sys
+import json
 import logging
-from anki import Collection as aopen
+import urllib.request
 
 
 class CardCreator:
-    def __init__(self, coll_file, deck_name):
-        self.coll_file = coll_file
+    def __init__(self, deck_name):
         self.deck_name = deck_name
 
+    def request(self, action, **params):
+        return {'action': action, 'params': params, 'version': 6}
+
+    def invoke(self, action, **params):
+        requestJson = json.dumps(self.request(
+            action, **params)).encode('utf-8')
+        response = json.load(urllib.request.urlopen(
+            urllib.request.Request('http://localhost:8765', requestJson)))
+        if len(response) != 2:
+            raise Exception('response has an unexpected number of fields')
+        if 'error' not in response:
+            raise Exception('response is missing required error field')
+        if 'result' not in response:
+            raise Exception('response is missing required result field')
+        if response['error'] is not None:
+            raise Exception(response['error'])
+        return response['result']
+
     def create(self, card_front, card_back):
-        logging.info("Get Collection/Deck '" + self.coll_file + "/" + self.deck_name +
-              "'")
-        deck = aopen(self.coll_file)
-        deckId = deck.decks.id(self.deck_name)
+        logging.info("Adding note to " + self.deck_name)
+        self.invoke('addNote',
+                    note={
+                        "deckName": self.deck_name,
+                        "modelName": "Basic",
+                        "fields": {
+                            "Front": card_front,
+                            "Back": card_back,
+                        },
+                    })
 
-        deck.decks.select(deckId)
-        basic_model = deck.models.byName('Basic')
-        basic_model['did'] = deckId
-        deck.models.save(basic_model)
-        deck.models.setCurrent(basic_model)
-
-        # todo I don't see any other ways to prevent creating a new Deck
-        if deck.cardCount == 0:
-            sys.exit("ERROR: Collection/Deck '" + coll_file + "/" + deck_name +
-                     "' does not exist.")
-
-        logging.info("Deck has " + str(deck.cardCount()) + " cards")
-
-        logging.info("Make a new Card for: " + card_front)
-        fact = deck.newNote()
-        fact['Front'] = card_front
-        fact['Back'] = card_back
-
-        # Add Card to the Deck
-        try:
-            deck.addNote(fact)
-        except:
-            if hasattr(e, "data"):
-                sys.exit("ERROR: Could not add '" + e.data['field'] + "': " +
-                         e.data['type'])
-            else:
-                sys.exit(e)
-
-        # Done.
-        logging.info("Save the Deck")
-        deck.save()
-        deck.close()
+        logging.info("Note added.")

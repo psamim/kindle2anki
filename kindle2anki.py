@@ -21,6 +21,7 @@ init()
 
 TIMESTAMP_PATH = os.path.expanduser('~/.kindle')
 
+
 def get_lookups(db, timestamp=0):
     conn = sqlite3.connect(db)
     res = []
@@ -80,7 +81,7 @@ def get_last_timestamp_from_lookup(db):
     conn = sqlite3.connect(db)
     res = conn.execute(
         'select timestamp from WORDS order by timestamp desc limit 1;').fetchall(
-        )
+    )
     conn.close()
     last_timestamp = res[0][0] if len(res) > 0 else None
     logging.debug("last timestamp from lookup: " + str(last_timestamp))
@@ -146,19 +147,18 @@ def highlight_word_in_context(word, context):
     return re.sub(r'{}'.format(word),
                   '<span class=highlight>{}</span>'.format(word), context)
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '--kindle', help='Path to kindle db file (usually vocab.db)')
+        '--vocab-db', help='Path to Kindle vocab DB file (usually vocab.db on Kindle). Provide this either this or --clippings')
     parser.add_argument(
-        '--src', help='Path to "documents/My Clippings.txt" on kindle')
-    parser.add_argument(
-        '--collection', help='Path to anki collection file (.anki file)')
+        '--clippings', help='Path to clippings (usually "documents/My Clippings.txt" on Kindle)')
     parser.add_argument('--deck', help='Anki deck name')
     parser.add_argument(
         '-o',
         '--out',
-        help='CSV output filename to import into anki, if not provided words are added to provided Anki deck and collection')
+        help='CSV output filename to import into Anki, if not provided words are added to Anki using anki-connect')
     parser.add_argument(
         '-m',
         '--media-path',
@@ -190,8 +190,6 @@ if __name__ == '__main__':
         default=False,
         action="store_true")
 
-
-
     args = parser.parse_args()
 
     if (args.verbose):
@@ -209,15 +207,16 @@ if __name__ == '__main__':
         lingualeo = service.Lingualeo(email, password)
         res = lingualeo.auth()
 
-    if args.kindle:
-        lookups = get_lookups(args.kindle, timestamp)
-    elif args.src:
-        lookups = get_lookups_from_file(args.src, timestamp, args.max_length)
+    if args.vocab_db:
+        lookups = get_lookups(args.vocab_db, timestamp)
+    elif args.clippings:
+        lookups = get_lookups_from_file(
+            args.clippings, timestamp, args.max_length)
     else:
         logging.error("No input specified")
         sys.exit(1)
 
-    card = card_creator.CardCreator(args.collection, args.deck)
+    card = card_creator.CardCreator(args.deck)
 
     data = []
     prev_timestamp = 0
@@ -269,7 +268,8 @@ if __name__ == '__main__':
                     sys.exit(0)
 
                 if desc == 's':
-                    print(Style.DIM + "===============================================================================" + Style.RESET_ALL)
+                    print(
+                        Style.DIM + "===============================================================================" + Style.RESET_ALL)
                     prev_timestamp = timestamp
                     continue
 
@@ -290,14 +290,13 @@ if __name__ == '__main__':
         else:
             try:
                 card.create(word, desc + "<br /><br />" +
-                        highlight_word_in_context(word, context))
+                            highlight_word_in_context(word, context))
             except sqlite3.OperationalError as e:
-                print(Fore.RED + "Error: " + Style.RESET_ALL + "Is Anki open? Database is locked.")
+                print(Fore.RED + "Error: " + Style.RESET_ALL +
+                      "Is Anki open? Database is locked.")
                 if prev_timestamp != 0:
                     update_last_timestamp(prev_timestamp)
                 sys.exit(1)
-
-
 
         print(Style.DIM + "===============================================================================" + Style.RESET_ALL)
         prev_timestamp = timestamp
