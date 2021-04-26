@@ -151,32 +151,13 @@ def highlight_word_in_context(word, context):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '--vocab-db', help='Path to Kindle vocab DB file (usually vocab.db on Kindle). Provide this either this or --clippings')
+        '--vocab-db', help='Path to Kindle vocab DB file (usually "/system/vocabulary/vocab.db" on Kindle). Provide this either this or --clippings')
     parser.add_argument(
-        '--clippings', help='Path to clippings (usually "documents/My Clippings.txt" on Kindle)')
+        '--clippings', help='Path to clippings (usually "/documents/My Clippings.txt" on Kindle)')
     parser.add_argument('--deck', help='Anki deck name')
     parser.add_argument(
-        '-o',
-        '--out',
-        help='CSV output filename to import into Anki, if not provided words are added to Anki using anki-connect')
-    parser.add_argument(
-        '-m',
-        '--media-path',
-        help='Where to store media files (sounds/images) from Lingualeo')
-    parser.add_argument('--email', help='LinguaLeo account email/login')
-    parser.add_argument(
         '--update-timestamp',
-        help='Update local timestamp to now and exit',
-        default=False,
-        action="store_true")
-    parser.add_argument('--pwd', help='LinguaLeo account password')
-    parser.add_argument(
-        '--max-length',
-        help='Maximum length of words from clippings, to avoid importing big sentences',
-        default=30)
-    parser.add_argument(
-        '--verbose',
-        help='Show debug messages',
+        help='Only update local timestamp to now and exit',
         default=False,
         action="store_true")
     parser.add_argument(
@@ -187,6 +168,25 @@ if __name__ == '__main__':
     parser.add_argument(
         '--clipboard',
         help='Copy each word to clipboard',
+        default=False,
+        action="store_true")
+    parser.add_argument(
+        '-o',
+        '--out',
+        help='CSV output filename to import into Anki, if not provided words are added to Anki using anki-connect')
+    parser.add_argument(
+        '-m',
+        '--media-path',
+        help='Where to store media files (sounds/images) from Lingualeo')
+    parser.add_argument('--email', help='LinguaLeo account email/login')
+    parser.add_argument('--pwd', help='LinguaLeo account password')
+    parser.add_argument(
+        '--max-length',
+        help='Maximum length of words from clippings, to avoid importing big sentences',
+        default=30)
+    parser.add_argument(
+        '--verbose',
+        help='Show debug messages',
         default=False,
         action="store_true")
 
@@ -288,15 +288,7 @@ if __name__ == '__main__':
                 data.append((word, desc + "<br /><br />" +
                              highlight_word_in_context(word, context)))
         else:
-            try:
-                card.create(word, desc + "<br /><br />" +
-                            highlight_word_in_context(word, context))
-            except sqlite3.OperationalError as e:
-                print(Fore.RED + "Error: " + Style.RESET_ALL +
-                      "Is Anki open? Database is locked.")
-                if prev_timestamp != 0:
-                    update_last_timestamp(prev_timestamp)
-                sys.exit(1)
+            card.create(word, desc + "<br /><br />" + highlight_word_in_context(word, context))
 
         print(Style.DIM + "===============================================================================" + Style.RESET_ALL)
         prev_timestamp = timestamp

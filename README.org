@@ -51,34 +51,34 @@ Then install this script from [[https://aur.archlinux.org/packages/kindle2anki-g
 $ ./kindle2anki.py --help
 
 usage: kindle2anki.py [-h] [--vocab-db VOCAB_DB] [--clippings CLIPPINGS]
-                      [--deck DECK] [-o OUT] [-m MEDIA_PATH] [--email EMAIL]
-                      [--update-timestamp] [--pwd PWD]
-                      [--max-length MAX_LENGTH] [--verbose] [--no-ask]
-                      [--clipboard]
+                      [--deck DECK] [--update-timestamp] [--no-ask]
+                      [--clipboard] [-o OUT] [-m MEDIA_PATH] [--email EMAIL]
+                      [--pwd PWD] [--max-length MAX_LENGTH] [--verbose]
 
 optional arguments:
   -h, --help            show this help message and exit
-  --vocab-db VOCAB_DB   Path to Kindle vocab DB file (usually vocab.db on
-                        Kindle). Provide this either this or --clippings
+  --vocab-db VOCAB_DB   Path to Kindle vocab DB file (usually
+                        "/system/vocabulary/vocab.db" on Kindle). Provide this
+                        either this or --clippings
   --clippings CLIPPINGS
-                        Path to clippings (usually "documents/My
+                        Path to clippings (usually "/documents/My
                         Clippings.txt" on Kindle)
   --deck DECK           Anki deck name
+  --update-timestamp    Only update local timestamp to now and exit
+  --no-ask              Do not ask for card back in the command line
+  --clipboard           Copy each word to clipboard
   -o OUT, --out OUT     CSV output filename to import into Anki, if not
                         provided words are added to Anki using anki-connect
   -m MEDIA_PATH, --media-path MEDIA_PATH
                         Where to store media files (sounds/images) from
                         Lingualeo
   --email EMAIL         LinguaLeo account email/login
-  --update-timestamp    Update local timestamp to now and exit
   --pwd PWD             LinguaLeo account password
   --max-length MAX_LENGTH
                         Maximum length of words from clippings, to avoid
                         importing big sentences
   --verbose             Show debug messages
-  --no-ask              Do not ask for card back in the command line
-  --clipboard           Copy each word to clipboard
-#+END_SRC
+
 
 * Automatic Sync
 One can use udev rules to run this script automatically on Kindle connect. See 
