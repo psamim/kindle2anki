@@ -78,6 +78,7 @@ optional arguments:
                         Maximum length of words from clippings, to avoid
                         importing big sentences
   --verbose             Show debug messages
+#+END_SRC shell
 
 
 * Automatic Sync
