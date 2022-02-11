@@ -6,7 +6,7 @@ decorator==4.4.2
 distro==1.5.0
 idna==2.10
 orjson==3.4.0
-protobuf==3.13.0
+protobuf==3.15.0
 PyAudio==0.2.9
 pyperclip==1.5.27
 PySocks==1.7.1
